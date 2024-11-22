@@ -8,11 +8,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1732261369,
-        "narHash": "sha256-yhWJBNzxR5C7SsVkXeIZ3taeWUSAY9AFyIuzdr2mx4A=",
+        "lastModified": 1732265103,
+        "narHash": "sha256-yn4wnKtdSaIdJOubVrjfmGdNc3vbwEcX97StMkPpPhs=",
         "owner": "tarc",
         "repo": "ardupkgs",
-        "rev": "0610c55d06739784a1184ee2807f87beba353b3b",
+        "rev": "658f35eebca77ad2620f5d53f48743d3eb3938e5",
         "type": "github"
       },
       "original": {
