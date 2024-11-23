@@ -1,21 +1,7 @@
-# My Custom Nixpkgs Overlay
+# Ardupipe
 
-This project uses [flake-parts](https://flake.parts), a flake framework to
-manage Nix expressions and to some extent, packages.
+This project provides a building infrastructure for the [ArduPilot] project. It relies on [ArduPilot's GitHub repository][github-ardupilot] for the project's source code and on [`ardupkgs`] for the remaining dependencies and tooling.
 
-## Contributing
-
-Feel free to contribute by sending pull requests. We are a usually very
-responsive team and we will help you going through your pull request from the
-beginning to the end.
-
-For some reasons, if you can't contribute to the code and willing to help,
-sponsoring is a good, sound and safe way to show us some gratitude for the hours
-we invested in this package.
-
-Sponsor me on [Github][github sponsors link] and/or any of [the
-contributors][6].
-
-[donate github]: https://img.shields.io/badge/Sponsor-Github-brightgreen.svg?style=flat-square
-[github sponsors link]: https://github.com/sponsors/tarc
-[6]: https://github.com/tarc/ardupkgs/graphs/contributors
+[ArduPilot]: https://ardupilot.org/
+[github-ardupilot]: https://github.com/ArduPilot/ardupilot
+[`ardupkgs`]: https://github.com/tarc/ardupkgs

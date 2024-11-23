@@ -2,10 +2,13 @@
   packages = with pkgs; [
     example1
     example2
+    mavproxy
   ];
 
   languages = {
-    python.enable = true;
+    python = {
+      enable = true;
+    };
   };
 
   pre-commit = {

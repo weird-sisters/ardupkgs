@@ -1,5 +1,5 @@
 {
-  description = "Description for the project";
+  description = "Building infrastructure for ArduPilot";
 
   inputs = {
     devenv-root = {
@@ -8,7 +8,7 @@
     };
     flake-parts.url = "github:hercules-ci/flake-parts";
     systems.url = "github:nix-systems/default";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/*.tar.gz";
     devenv.url = "github:cachix/devenv";
     nix2container.url = "github:nlewo/nix2container";
     nix2container.inputs.nixpkgs.follows = "nixpkgs";
@@ -31,15 +31,17 @@
     ];
   };
 
-  outputs =
-    inputs@{ flake-parts, systems, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
+  outputs = inputs @ {
+    flake-parts,
+    systems,
+    ...
+  }:
+    flake-parts.lib.mkFlake {inherit inputs;} {
       systems = import systems;
 
       imports = [
-        inputs.devenv.flakeModule
-        ./imports/devShells.nix
         ./imports/overlay.nix
+        ./devenv
       ];
     };
 }
