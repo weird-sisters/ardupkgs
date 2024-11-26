@@ -13,7 +13,7 @@
     nix2container.url = "github:nlewo/nix2container";
     nix2container.inputs.nixpkgs.follows = "nixpkgs";
     mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
-    ardupkgs.url = "github:tarc/ardupkgs";
+    ardutooling.url = "github:tarc/ardutooling";
   };
 
   nixConfig = {
@@ -31,12 +31,9 @@
     ];
   };
 
-  outputs = inputs @ {
-    flake-parts,
-    systems,
-    ...
-  }:
-    flake-parts.lib.mkFlake {inherit inputs;} {
+  outputs =
+    inputs@{ flake-parts, systems, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import systems;
 
       imports = [
