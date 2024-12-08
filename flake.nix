@@ -1,21 +1,6 @@
 {
   description = "Building infrastructure for ArduPilot";
 
-  inputs = {
-    devenv-root = {
-      url = "file+file:///dev/null";
-      flake = false;
-    };
-    flake-parts.url = "github:hercules-ci/flake-parts";
-    systems.url = "github:nix-systems/default";
-    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/*.tar.gz";
-    devenv.url = "github:cachix/devenv";
-    nix2container.url = "github:nlewo/nix2container";
-    nix2container.inputs.nixpkgs.follows = "nixpkgs";
-    mk-shell-bin.url = "github:rrbutani/nix-mk-shell-bin";
-    ardutooling.url = "github:tarc/ardutooling";
-  };
-
   nixConfig = {
     extra-trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
@@ -31,14 +16,68 @@
     ];
   };
 
-  outputs =
-    inputs@{ flake-parts, systems, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = import systems;
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.05-darwin";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-      imports = [
-        ./imports/overlay.nix
-        ./devenv
-      ];
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs-darwin";
     };
+  
+    systems.url = "github:nix-systems/default";
+
+    devshell.url = "github:numtide/devshell";
+
+    treefmt-nix.url = "github:numtide/treefmt-nix";
+  };
+
+  outputs =
+    inputs@{ flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } (
+      {
+        flake-parts-lib,
+        withSystem,
+        ...
+      }:
+      let
+        inherit (flake-parts-lib) importApply;
+        flakeModules.default = importApply ./flake-module.nix {
+          inherit inputs;
+          inherit withSystem; 
+        };
+      in
+      {
+        imports = [
+          flakeModules.default
+        ];
+        systems = import inputs.systems;
+        perSystem =
+          {
+            system,
+            ...
+          }:
+          {
+            _module.args.pkgs = import inputs.nixpkgs {
+              inherit system;
+              overlays = [
+                (final: prev: {
+                  conan = inputs.nixpkgs-unstable.legacyPackages.${system}.conan;
+                })
+              ];
+              config = { };
+            };
+            ardutoolchains.default = {
+              # sitl by default
+            };
+            ardutoolchains.MatekH743 = {
+              name = "MatekH743";
+            };
+          };
+        flake = {
+          inherit flakeModules;
+        };
+      }
+    );
 }
