@@ -27,10 +27,9 @@
     };
   
     systems.url = "github:nix-systems/default";
-
     devshell.url = "github:numtide/devshell";
-
     treefmt-nix.url = "github:numtide/treefmt-nix";
+    nixshellcmds.url = "github:weird-sisters/nixshellcmds";
   };
 
   outputs =
@@ -51,6 +50,9 @@
       {
         imports = [
           flakeModules.default
+          inputs.devshell.flakeModule
+          inputs.nixshellcmds.flakeModules.flakeCmds
+          inputs.nixshellcmds.flakeModules.shellInit
         ];
         systems = import inputs.systems;
         perSystem =
