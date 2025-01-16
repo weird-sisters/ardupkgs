@@ -17,13 +17,17 @@
   };
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
-    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.05-darwin";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
+    nixpkgs-darwin-lib.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin?dir=lib";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs-unstable-lib.url = "github:NixOS/nixpkgs/nixpkgs-unstable?dir=lib";
+
+    nixpkgs.follows = "nixpkgs-unstable";
+    nixpkgs-lib.follows = "nixpkgs-unstable-lib";
 
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follows = "nixpkgs-darwin";
+      inputs.nixpkgs-lib.follows = "nixpkgs-lib";
     };
   
     systems.url = "github:nix-systems/default";
